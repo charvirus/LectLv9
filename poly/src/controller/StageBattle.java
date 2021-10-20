@@ -55,6 +55,24 @@ public class StageBattle extends Stage {
 				}
 			}
 		} else if (sel == 2) {
+			String name = p.getName();
+			if (name.equals("전사")) {
+				while (true) {
+					int idx = ran.nextInt(monList.size());
+					if (monList.get(idx).getCurhp() > 0) {
+						p.skillAttackX(monList.get(idx), 2);
+						break;
+					}
+				}
+			} else if (name.equals("마법사")) {
+				for (int i = 0; i < monList.size(); i++) {
+					if (monList.get(i).getCurhp() > 0) {
+						p.skillAttackAll(monList.get(i), 1);
+					}
+				}
+			} else if (name.equals("힐러")) {
+				p.skillHealAll(playerList, 100);
+			}
 		}
 	}
 
@@ -66,8 +84,8 @@ public class StageBattle extends Stage {
 			int skill = ran.nextInt(100);
 			int idx = ran.nextInt(playerList.size());
 			if (skill > 74) {
-				System.out.println("몬스터 ["+m.getName()+"]의 스킬 발동");
-				
+				System.out.println("몬스터 [" + m.getName() + "]의 스킬 발동");
+
 			} else {
 				if (playerList.get(idx).getCurhp() > 0) {
 					m.attack(playerList.get(idx));

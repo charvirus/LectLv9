@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Vector;
+
 public abstract class Unit {
 	private int curhp;
 	private int maxhp;
@@ -79,8 +81,16 @@ public abstract class Unit {
 			target.curhp = 0;
 		}
 	}
+
+	public abstract void skillAttackX(Unit target, int mul);
+
+	public abstract void skillAttackAll(Unit target, int mul);
+	
+	public abstract void skillHealAll(Vector list,int num);
 	
 	public void printData() {
-		System.out.println("["+name + "] [" + curhp + "/" + maxhp + "] [" + power +"]");
+		System.out.println("[" + name + "] [" + curhp + "/" + maxhp + "] [" + power + "]");
 	}
+
+	public abstract void skill(String name);
 }
