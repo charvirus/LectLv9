@@ -34,4 +34,10 @@ public class UnitOrc extends Unit {
 		
 	}
 
+	@Override
+	public void statusAbnormality(Unit target) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

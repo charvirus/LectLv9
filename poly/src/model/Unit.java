@@ -81,7 +81,7 @@ public abstract class Unit {
 			target.curhp = 0;
 		}
 	}
-
+	public abstract void statusAbnormality(Unit target);
 	public abstract void skillAttackX(Unit target, int mul);
 
 	public abstract void skillAttackAll(Unit target, int mul);
