@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
 
 class HeadTitle extends JLabel {
 	public HeadTitle() {
-		setBounds(MyFrame.W / 2 - 120 / 2, 10, 120, 75);
+		setBounds(MyFrame.W / 2 - 120 / 2, 10, 120, 50);
 		setHorizontalAlignment(CENTER);
 		Border border = BorderFactory.createLineBorder(Color.BLACK, 1);
 		setBorder(border);
