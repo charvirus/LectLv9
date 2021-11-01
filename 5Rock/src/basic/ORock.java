@@ -1,17 +1,10 @@
 package basic;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.text.AttributeSet.ColorAttribute;
 
 // 최상위 컨테이너 : JFrame
@@ -19,13 +12,24 @@ import javax.swing.text.AttributeSet.ColorAttribute;
 // 컴포넌트 : JButton, JLabel, JTextField...
 // 리스너 : 컴포넌트에 리스너를 add하면, 이벤트 발생 시 -> 캐치 ->처리
 
+class Nemo {
+	int x, y, width, height;
+
+	public Nemo(int x, int y, int width, int height) {
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+	}
+}
+
 class Map extends JPanel implements ActionListener {
 	private final int SIZE = 10;
 	private JButton[][] map = new JButton[SIZE][SIZE];
 	private JButton line = new JButton();
 	private JButton reset = new JButton();
 	private int[][] intMap = new int[SIZE][SIZE];
-	private final int BUTTON = 45;
+	private final int BUTTON = 50;
 	private int turn = 1;
 
 	public Map() {
@@ -38,7 +42,8 @@ class Map extends JPanel implements ActionListener {
 
 	private void setMap() {
 		int x = FRock.WIDTH / 2 - BUTTON * SIZE / 2;
-		int y = FRock.HEIGHT / 2 - BUTTON * SIZE / 2;
+		int y = FRock.HEIGHT / 2 - BUTTON * SIZE / 2 - 70;
+
 		for (int i = 0; i < map.length; i++) {
 			for (int j = 0; j < map[i].length; j++) {
 				this.map[i][j] = new JButton();
@@ -48,7 +53,7 @@ class Map extends JPanel implements ActionListener {
 				add(this.map[i][j]);
 				x += BUTTON;
 			}
-			y += BUTTON - 1;
+			y += BUTTON;
 			x = FRock.WIDTH / 2 - BUTTON * SIZE / 2;
 		}
 	}
@@ -58,7 +63,7 @@ class Map extends JPanel implements ActionListener {
 		this.line.setText("VIEW GUIDE");
 		this.line.setVerticalAlignment(JLabel.CENTER);
 		this.line.setHorizontalAlignment(JLabel.CENTER);
-		this.reset.addActionListener(this);
+		this.line.addActionListener(this);
 		add(this.line);
 	}
 
@@ -70,6 +75,20 @@ class Map extends JPanel implements ActionListener {
 		this.reset.addActionListener(this);
 		add(this.reset);
 	}
+
+//	@Override
+//	protected void paintComponent(Graphics g) {
+//		int x = FRock.WIDTH / 2 - BUTTON * SIZE / 2;
+//		int y = FRock.HEIGHT / 2 - BUTTON * SIZE / 2 - 70;
+//		for (int i = 0; i < this.map.length; i++) {
+//			for (int j = 0; j < this.map[i].length; j++) {
+//				g.drawRect(x - 25, y - 25, BUTTON, BUTTON);
+//				x += BUTTON;
+//			}
+//			y += BUTTON;
+//			x = FRock.WIDTH / 2 - BUTTON * SIZE / 2;
+//		}
+//	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
