@@ -1,4 +1,4 @@
-package snake_GUI;
+package snake;
 
 public class Main {
 

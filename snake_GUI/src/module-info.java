@@ -1,5 +1,4 @@
 module snake_GUI {
-	exports snake_GUI;
+	exports snake;
 	requires java.desktop;
-	
 }
