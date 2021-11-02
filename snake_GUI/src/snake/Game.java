@@ -131,8 +131,12 @@ class SnakePanel extends MyUtil {
 		} else if (dir == 4) {
 			yy -= BUTTON;
 		}
-		
-		if (check||xx < x || xx > x + BUTTON * 10 || yy < y || yy > y + BUTTON * 10) {
+		for(int i = 1;i<snake.length;i++) {
+			if(xx == snake[i].getX() && yy == snake[i].getY()) {
+				check = false;
+			}
+		}
+		if (!check||xx < x || xx > x + BUTTON * 10 || yy < y || yy > y + BUTTON * 10) {
 			xx = snake[0].getX();
 			yy = snake[0].getY();
 		} else {
