@@ -22,8 +22,8 @@ public class Panel extends MyUtil {
 	}
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		rect.setWidth(rect.getX()-e.getX());
-		rect.setHeight(rect.getY()-e.getY());		
+		rect.setWidth(e.getX()-rect.getX());
+		rect.setHeight(e.getY()-rect.getY());		
 	}
 	@Override
 	public void mouseReleased(MouseEvent e) {
