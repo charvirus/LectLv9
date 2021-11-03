@@ -60,9 +60,8 @@ class ExPanel extends MyUtil {
 		int xx = x - gapX;
 		int yy = y - gapY;
 
-		if (x >= rect.getX() && x <= rect.getX() + rect.getWidth() && y >= rect.getY()
-				&& y <= rect.getY() + rect.getWidth()) {
-
+		if (x >= rect.getX() && x <= rect.getX() + rect.getWidth()
+		 && y >= rect.getY() && y <= rect.getY() + rect.getWidth()) {
 			rect.setX(xx);
 			rect.setY(yy);
 		}
@@ -90,7 +89,6 @@ class ExFrame extends JFrame {
 		setBounds(0, 0, 500, 500);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		add(new ExPanel());
-
 		setVisible(true);
 		revalidate();
 	}
