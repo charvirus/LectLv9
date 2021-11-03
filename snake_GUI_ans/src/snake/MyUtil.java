@@ -8,7 +8,8 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import javax.swing.JPanel;
-public class MyUtil extends JPanel implements ActionListener, MouseListener, KeyListener, MouseMotionListener{
+import javax.swing.event.MouseInputListener;
+public class MyUtil extends JPanel implements ActionListener, MouseListener, KeyListener, MouseMotionListener,MouseInputListener{
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
@@ -75,5 +76,6 @@ public class MyUtil extends JPanel implements ActionListener, MouseListener, Key
 		// TODO Auto-generated method stub
 		
 	}
+
 
 }

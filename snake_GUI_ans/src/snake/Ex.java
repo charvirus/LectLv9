@@ -43,30 +43,42 @@ class RectEx {
 
 class ExPanel extends MyUtil {
 	private RectEx rect = new RectEx(100, 100, 100, 100);
+	private int gapX, gapY;
 
 	public ExPanel() {
+
 		setBounds(0, 0, 500, 500);
 		addMouseMotionListener(this);
+		addMouseListener(this);
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		rect.setX(e.getX() );
-		rect.setY(e.getY() );
+		int x = e.getX();
+		int y = e.getY();
+
+		int xx = x - gapX;
+		int yy = y - gapY;
+
+		if (x >= rect.getX() && x <= rect.getX() + rect.getWidth() && y >= rect.getY()
+				&& y <= rect.getY() + rect.getWidth()) {
+
+			rect.setX(xx);
+			rect.setY(yy);
+		}
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		super.mousePressed(e);
-		
+		this.gapX = e.getX() - this.rect.getX();
+		this.gapY = e.getY() - this.rect.getY();
 	}
-	
+
 	@Override
 	protected void paintComponent(Graphics g) {
 		// TODO Auto-generated method stub
 		super.paintComponent(g);
-		g.drawRect(this.rect.getX(),this.rect.getY(),this.rect.getWidth(),this.rect.getHeight());
+		g.drawRect(this.rect.getX(), this.rect.getY(), this.rect.getWidth(), this.rect.getHeight());
 		repaint();
 	}
 }
@@ -75,7 +87,7 @@ class ExFrame extends JFrame {
 	public ExFrame() {
 		super("Drag");
 		setLayout(null);
-		setBounds(100, 100, 500, 500);
+		setBounds(0, 0, 500, 500);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		add(new ExPanel());
 
