@@ -33,12 +33,13 @@ public class Panel extends MyUtil {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.isShiftDown() == true) {
-//			shiftPressed = true;
-//		} else {
-//			shiftPressed = false;
-			System.out.println(this.rect.getX() + "," + this.rect.getY() + "," + this.rect.getWidth() + ","
-					+ this.rect.getHeight());
+			shiftPressed = true;
 		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		shiftPressed = false;
 	}
 
 	@Override
@@ -54,8 +55,30 @@ public class Panel extends MyUtil {
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		if (shiftPressed) {
-			rect.setWidth(e.getX() - rect.getX());
-			rect.setHeight(e.getX() - rect.getX());
+			if (e.getX() > startX && e.getY() > startY) {
+				rect.setX(startX);
+				rect.setY(startY);
+				rect.setWidth(e.getX() - rect.getX());
+				rect.setHeight(e.getX() - rect.getX());
+			} else if (e.getX() > startX && e.getY() < startY) {
+
+				rect.setX(startX);
+				rect.setY(e.getY());
+				rect.setHeight(startY - e.getY());
+				rect.setWidth(rect.getHeight());
+
+			} else if (e.getX() < startX && e.getY() < startY) {
+				rect.setHeight(startY - e.getY());
+				rect.setWidth(rect.getHeight());
+				rect.setX(startX - rect.getWidth());
+				rect.setY(startY - rect.getHeight());
+			} else if (e.getX() < startX && e.getY() > startY) {
+				rect.setX(e.getX());
+				rect.setY(startY);
+				rect.setWidth(startX - e.getX());
+				rect.setHeight(rect.getWidth());
+			}
+
 		} else {
 			if (e.getX() > startX) {
 				rect.setX(startX);
@@ -78,20 +101,48 @@ public class Panel extends MyUtil {
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		if (e.getX() > startX) {
-			rect.setX(startX);
-			rect.setWidth(e.getX() - rect.getX());
-		} else {
-			rect.setX(e.getX());
-			rect.setWidth(startX - e.getX());
-		}
 
-		if (e.getY() > startY) {
-			rect.setY(startY);
-			rect.setHeight(e.getY() - rect.getY());
+		if (shiftPressed) {
+			if (e.getX() > startX && e.getY() > startY) {
+				rect.setX(startX);
+				rect.setY(startY);
+				rect.setWidth(e.getX() - rect.getX());
+				rect.setHeight(e.getX() - rect.getX());
+			} else if (e.getX() > startX && e.getY() < startY) {
+
+				rect.setX(startX);
+				rect.setY(e.getY());
+				rect.setHeight(startY - e.getY());
+				rect.setWidth(rect.getHeight());
+
+			} else if (e.getX() < startX && e.getY() < startY) {
+				rect.setHeight(startY - e.getY());
+				rect.setWidth(rect.getHeight());
+				rect.setX(startX - rect.getWidth());
+				rect.setY(startY - rect.getHeight());
+			} else if (e.getX() < startX && e.getY() > startY) {
+				rect.setX(e.getX());
+				rect.setY(startY);
+				rect.setWidth(startX - e.getX());
+				rect.setHeight(rect.getWidth());
+			}
+
 		} else {
-			rect.setY(e.getY());
-			rect.setHeight(startY - e.getY());
+			if (e.getX() > startX) {
+				rect.setX(startX);
+				rect.setWidth(e.getX() - rect.getX());
+			} else {
+				rect.setX(e.getX());
+				rect.setWidth(startX - e.getX());
+			}
+
+			if (e.getY() > startY) {
+				rect.setY(startY);
+				rect.setHeight(e.getY() - rect.getY());
+			} else {
+				rect.setY(e.getY());
+				rect.setHeight(startY - e.getY());
+			}
 		}
 	}
 
