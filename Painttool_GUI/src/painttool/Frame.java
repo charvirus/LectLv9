@@ -1,5 +1,7 @@
 package painttool;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -7,53 +9,26 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-public class Frame extends JFrame implements MouseListener {
-	JButton close = new JButton();
+public class Frame extends JFrame implements ActionListener {
+
+	Panel pan = new Panel();
 
 	public Frame() {
 		super("Paint Tool");
 		setLayout(null);
-		setBounds(0, 0, Panel.SIZE, Panel.SIZE);
+		setBounds(100, 100, 900, 700);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		close.setText("Close");
-		close.setBounds(Panel.SIZE - 150, Panel.SIZE - 120, 100, 50);
-		close.addMouseListener(this);
-		add(close);
-		add(new Panel());
+		pan.close.addActionListener(this);
+		add(pan);
 		setVisible(true);
 		revalidate();
 	}
 
-
 	@Override
-	public void mouseClicked(MouseEvent e) {
-		if ((JButton) e.getSource() == close) {
+	public void actionPerformed(ActionEvent e) {
+		if ((JButton) e.getSource() == pan.close) {
 			this.dispose();
 		}
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 }
