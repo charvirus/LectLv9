@@ -1,13 +1,14 @@
 package painttool;
-
+import java.awt.*;
 public class Rect {
 	private int x, y, width, height;
-
-	public Rect(int x, int y, int width, int height) {
+	private Color c ;
+	public Rect(int x, int y, int width, int height,Color c) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
+		this.c = c;
 	}
 
 	public int getX() {
@@ -16,6 +17,14 @@ public class Rect {
 
 	public void setX(int x) {
 		this.x = x;
+	}
+
+	public Color getC() {
+		return c;
+	}
+
+	public void setC(Color c) {
+		this.c = c;
 	}
 
 	public int getY() {

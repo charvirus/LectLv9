@@ -1,5 +1,6 @@
 package painttool;
 
+import java.awt.*;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -10,7 +11,7 @@ public class Panel extends MyUtil {
 	private int startX, startY;
 	public JButton close = new JButton("Close");
 
-	private Rect rect = new Rect(0, 0, 0, 0);
+	private Rect rect = null;
 	private boolean shiftPressed = false;
 
 	public Panel() {
@@ -31,127 +32,91 @@ public class Panel extends MyUtil {
 	}
 
 	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+
+		// 삼각형 그리기
+		// drawPolygon(int [],int[],int)
+		// (x좌표의 배열, y좌표의 배열, 꼭지점 개수)
+		int[] xxx = { 100, 50, 150 };
+		int[] yyy = { 100, 200, 200 };
+		g.setColor(Color.blue);
+		g.drawPolygon(xxx, yyy, 3);
+		// 네모 그리기 (스레드)
+		if (this.rect != null) {
+			g.setColor(this.rect.getC());
+			g.drawRect(this.rect.getX(), this.rect.getY(), this.rect.getWidth(), this.rect.getHeight());
+		}
+		requestFocusInWindow();
+		repaint();
+	}
+
+	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.isShiftDown() == true) {
-			shiftPressed = true;
+			this.shiftPressed = true;
 		}
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		shiftPressed = false;
+		this.shiftPressed = false;
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-
-		rect.setX(e.getX());
-		rect.setY(e.getY());
-
-		startX = e.getX();
-		startY = e.getY();
+		this.startX = e.getX();
+		this.startY = e.getY();
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
+		int XX = 0, YY = 0, W = 0, H = 0;
 		if (shiftPressed) {
 			if (e.getX() > startX && e.getY() > startY) {
-				rect.setX(startX);
-				rect.setY(startY);
-				rect.setWidth(e.getX() - rect.getX());
-				rect.setHeight(e.getX() - rect.getX());
+				XX = startX;
+				YY = startY;
+				W = e.getX() - XX;
+				H = e.getX() - XX;
 			} else if (e.getX() > startX && e.getY() < startY) {
 
-				rect.setX(startX);
-				rect.setY(e.getY());
-				rect.setHeight(startY - e.getY());
-				rect.setWidth(rect.getHeight());
+				XX = startX;
+				YY = e.getY();
+				H = startY - e.getY();
+				W = H;
 
 			} else if (e.getX() < startX && e.getY() < startY) {
-				rect.setHeight(startY - e.getY());
-				rect.setWidth(rect.getHeight());
-				rect.setX(startX - rect.getWidth());
-				rect.setY(startY - rect.getHeight());
+				H = startY - e.getY();
+				W = H;
+				XX = startX - W;
+				YY = startY - H;
 			} else if (e.getX() < startX && e.getY() > startY) {
-				rect.setX(e.getX());
-				rect.setY(startY);
-				rect.setWidth(startX - e.getX());
-				rect.setHeight(rect.getWidth());
+				XX = e.getX();
+				YY = startY;
+				W = startX - e.getX();
+				H = W;
 			}
 
 		} else {
 			if (e.getX() > startX) {
-				rect.setX(startX);
-				rect.setWidth(e.getX() - rect.getX());
+				XX = startX;
+				W = e.getX() - XX;
 			} else {
-				rect.setX(e.getX());
-				rect.setWidth(startX - e.getX());
+				XX = e.getX();
+				W = startX - e.getX();
 			}
 
 			if (e.getY() > startY) {
-				rect.setY(startY);
-				rect.setHeight(e.getY() - rect.getY());
+				YY = startY;
+				H = e.getY() - YY;
 			} else {
-				rect.setY(e.getY());
-				rect.setHeight(startY - e.getY());
+				YY = e.getY();
+				H = startY - e.getY();
 			}
 		}
-
+		this.rect = new Rect(XX, YY, W, H, Color.green);
 	}
 
-	@Override
-	public void mouseReleased(MouseEvent e) {
 
-		if (shiftPressed) {
-			if (e.getX() > startX && e.getY() > startY) {
-				rect.setX(startX);
-				rect.setY(startY);
-				rect.setWidth(e.getX() - rect.getX());
-				rect.setHeight(e.getX() - rect.getX());
-			} else if (e.getX() > startX && e.getY() < startY) {
-
-				rect.setX(startX);
-				rect.setY(e.getY());
-				rect.setHeight(startY - e.getY());
-				rect.setWidth(rect.getHeight());
-
-			} else if (e.getX() < startX && e.getY() < startY) {
-				rect.setHeight(startY - e.getY());
-				rect.setWidth(rect.getHeight());
-				rect.setX(startX - rect.getWidth());
-				rect.setY(startY - rect.getHeight());
-			} else if (e.getX() < startX && e.getY() > startY) {
-				rect.setX(e.getX());
-				rect.setY(startY);
-				rect.setWidth(startX - e.getX());
-				rect.setHeight(rect.getWidth());
-			}
-
-		} else {
-			if (e.getX() > startX) {
-				rect.setX(startX);
-				rect.setWidth(e.getX() - rect.getX());
-			} else {
-				rect.setX(e.getX());
-				rect.setWidth(startX - e.getX());
-			}
-
-			if (e.getY() > startY) {
-				rect.setY(startY);
-				rect.setHeight(e.getY() - rect.getY());
-			} else {
-				rect.setY(e.getY());
-				rect.setHeight(startY - e.getY());
-			}
-		}
-	}
-
-	@Override
-	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		g.drawRect(this.rect.getX(), this.rect.getY(), this.rect.getWidth(), this.rect.getHeight());
-		requestFocusInWindow();
-		repaint();
-	}
 
 }
