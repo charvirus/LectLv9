@@ -97,9 +97,9 @@ public class Panel extends MyUtil {
 			int yy[] = new int[3];
 
 			xx[0] = tri.getX();
-			yy[0] =tri.getY();
+			yy[0] = tri.getY();
 
-			xx[1] = tri.getX() -tri.getWidth() / 2;
+			xx[1] = tri.getX() - tri.getWidth() / 2;
 			yy[1] = tri.getY() + tri.getHeight();
 
 			xx[2] = tri.getX() + tri.getWidth() / 2;
