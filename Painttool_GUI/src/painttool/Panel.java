@@ -17,8 +17,10 @@ public class Panel extends MyUtil {
 	public JButton cirButton = new JButton("○");
 	private ArrayList<Rect> rects = new ArrayList<>();
 	private ArrayList<Cir> cirs = new ArrayList<>();
+	private ArrayList<Tri> tris = new ArrayList<>();
 	private Rect rect = null;
 	private Cir cir = null;
+	private Tri tri = null;
 	int figureCount = 0;
 	private boolean shiftPressed = false;
 	private boolean rectCheck = true;
@@ -64,16 +66,54 @@ public class Panel extends MyUtil {
 		g.setColor(Color.blue);
 		g.drawPolygon(xxx, yyy, 3);
 		// 네모 그리기 (스레드)
-		for (int i = 0; i < rects.size(); i++) {
-			g.setColor(this.rects.get(i).getC());
-			g.drawRect(this.rects.get(i).getX(), this.rects.get(i).getY(), this.rects.get(i).getWidth(),
-					this.rects.get(i).getHeight());
+
+		if (rect != null) {
+			g.setColor(rect.getC());
+			g.drawRect(rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
+		} else if (cir != null) {
+			g.setColor(cir.getC());
+			g.drawRoundRect(cir.getX(), cir.getY(), cir.getWidth(), cir.getHeight(), cir.getRoundX(), cir.getRoundY());
+		} else if (tri != null) {
+			int xx[] = new int[3];
+			int yy[] = new int[3];
+
+			xx[0] = this.tri.getX();
+			yy[0] = this.tri.getY();
+
+			xx[1] = this.tri.getX() - this.tri.getWidth() / 2;
+			yy[1] = this.tri.getY() + this.tri.getHeight();
+
+			xx[2] = this.tri.getX() + this.tri.getWidth() / 2;
+			yy[2] = this.tri.getY() + this.tri.getHeight();
+			g.drawPolygon(xx, yy, 3);
 		}
-		for (int i = 0; i < cirs.size(); i++) {
-			g.setColor(this.cirs.get(i).getC());
-			g.drawRoundRect(this.cirs.get(i).getX(), this.cirs.get(i).getY(), this.cirs.get(i).getWidth(),
-					this.cirs.get(i).getHeight(), this.cirs.get(i).getRoundX(), this.cirs.get(i).getRoundY());
+
+		for (Rect rect : this.rects) {
+			g.setColor(rect.getC());
+			g.drawRect(rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
 		}
+		for (Tri tri : this.tris) {
+			int xx[] = new int[3];
+			int yy[] = new int[3];
+
+			xx[0] = tri.getX();
+			yy[0] =tri.getY();
+
+			xx[1] = tri.getX() -tri.getWidth() / 2;
+			yy[1] = tri.getY() + tri.getHeight();
+
+			xx[2] = tri.getX() + tri.getWidth() / 2;
+			yy[2] = tri.getY() + tri.getHeight();
+
+			g.setColor(tri.getC());
+			g.drawPolygon(xx, yy, 3);
+		}
+
+		for (Cir cir : this.cirs) {
+			g.setColor(cir.getC());
+			g.drawRoundRect(cir.getX(), cir.getY(), cir.getWidth(), cir.getHeight(), cir.getRoundX(), cir.getRoundY());
+		}
+
 		requestFocusInWindow();
 		repaint();
 	}
@@ -120,126 +160,56 @@ public class Panel extends MyUtil {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		if (rectCheck) {
-			figureCount = rects.size();
-			this.rects.add(new Rect(0, 0, 0, 0, Color.red));
-		} else if (triCheck) {
-
-		} else if (cirCheck) {
-			figureCount = cirs.size();
-			this.cirs.add(new Cir(0, 0, 0, 0, 0, 0, Color.red));
-		}
 		this.startX = e.getX();
 		this.startY = e.getY();
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		if (rectCheck) {
-			int XX = 0, YY = 0, W = 0, H = 0;
 
-			if (shiftPressed) {
-				if (e.getX() > startX && e.getY() > startY) {
-					XX = startX;
-					YY = startY;
-					W = e.getX() - XX;
-					H = e.getX() - XX;
-				} else if (e.getX() > startX && e.getY() < startY) {
+		int XX = 0, YY = 0, W = 0, H = 0;
 
-					XX = startX;
-					YY = e.getY();
-					H = startY - e.getY();
-					W = H;
+		if (shiftPressed) {
 
-				} else if (e.getX() < startX && e.getY() < startY) {
-					H = startY - e.getY();
-					W = H;
-					XX = startX - W;
-					YY = startY - H;
-				} else if (e.getX() < startX && e.getY() > startY) {
-					XX = e.getX();
-					YY = startY;
-					W = startX - e.getX();
-					H = W;
-				}
+		} else {
+			XX = startX;
+			YY = startY;
 
-			} else {
-				if (e.getX() > startX) {
-					XX = startX;
-					W = e.getX() - XX;
-				} else {
-					XX = e.getX();
-					W = startX - e.getX();
-				}
+			W = triCheck ? e.getX() - this.startX : Math.abs(e.getX() - this.startX);
+			H = triCheck ? e.getY() - this.startY : Math.abs(e.getY() - this.startY);
 
-				if (e.getY() > startY) {
-					YY = startY;
-					H = e.getY() - YY;
-				} else {
-					YY = e.getY();
-					H = startY - e.getY();
-				}
+			if (this.startX > e.getX() && W > 1) {
+				XX = startX - W;
 			}
-			this.rects.set(figureCount, new Rect(XX, YY, W, H, Color.red));
-		} else if (triCheck) {
 
-		} else if (cirCheck) {
-			int XX = 0, YY = 0, W = 0, H = 0;
-
-			if (shiftPressed) {
-				if (e.getX() > startX && e.getY() > startY) {
-					XX = startX;
-					YY = startY;
-					W = e.getX() - XX;
-					H = e.getX() - XX;
-				} else if (e.getX() > startX && e.getY() < startY) {
-
-					XX = startX;
-					YY = e.getY();
-					H = startY - e.getY();
-					W = H;
-
-				} else if (e.getX() < startX && e.getY() < startY) {
-					H = startY - e.getY();
-					W = H;
-					XX = startX - W;
-					YY = startY - H;
-				} else if (e.getX() < startX && e.getY() > startY) {
-					XX = e.getX();
-					YY = startY;
-					W = startX - e.getX();
-					H = W;
-				}
-
-			} else {
-				if (e.getX() > startX) {
-					XX = startX;
-					W = e.getX() - XX;
-				} else {
-					XX = e.getX();
-					W = startX - e.getX();
-				}
-
-				if (e.getY() > startY) {
-					YY = startY;
-					H = e.getY() - YY;
-				} else {
-					YY = e.getY();
-					H = startY - e.getY();
-				}
+			if (this.startY > e.getY() && H > 1) {
+				YY = startY - H;
 			}
-			this.cirs.set(figureCount, new Cir(XX, YY, W, H, W, H, Color.red));
 		}
+		if (rectCheck) {
+			this.rect = new Rect(XX, YY, W, H, Color.red);
+		} else if (cirCheck) {
+			this.cir = new Cir(XX, YY, W, H, W, H, Color.red);
+		} else if (triCheck) {
+			this.tri = new Tri(XX, YY, W, H, Color.red);
+		}
+
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		if (rectCheck) {
-			this.rects.get(figureCount).setC(Color.green);
+			rect.setC(Color.green);
+			this.rects.add(rect);
+			rect = null;
 		} else if (triCheck) {
-
+			tri.setC(Color.orange);
+			this.tris.add(tri);
+			tri = null;
 		} else if (cirCheck) {
-			this.cirs.get(figureCount).setC(Color.blue);
+			cir.setC(Color.blue);
+			this.cirs.add(cir);
+			cir = null;
 		}
 	}
 
