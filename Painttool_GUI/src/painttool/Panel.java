@@ -16,7 +16,9 @@ public class Panel extends MyUtil {
 	public JButton triButton = new JButton("¡â");
 	public JButton cirButton = new JButton("¡Û");
 	private ArrayList<Rect> rects = new ArrayList<>();
+	private ArrayList<Cir> cirs = new ArrayList<>();
 	private Rect rect = null;
+	private Cir cir = null;
 	int figureCount = 0;
 	private boolean shiftPressed = false;
 	private boolean rectCheck = true;
@@ -67,6 +69,11 @@ public class Panel extends MyUtil {
 			g.drawRect(this.rects.get(i).getX(), this.rects.get(i).getY(), this.rects.get(i).getWidth(),
 					this.rects.get(i).getHeight());
 		}
+		for (int i = 0; i < cirs.size(); i++) {
+			g.setColor(this.cirs.get(i).getC());
+			g.drawRoundRect(this.cirs.get(i).getX(), this.cirs.get(i).getY(), this.cirs.get(i).getWidth(),
+					this.cirs.get(i).getHeight(), this.cirs.get(i).getRoundX(), this.cirs.get(i).getRoundY());
+		}
 		requestFocusInWindow();
 		repaint();
 	}
@@ -115,70 +122,125 @@ public class Panel extends MyUtil {
 	public void mousePressed(MouseEvent e) {
 		if (rectCheck) {
 			figureCount = rects.size();
+			this.rects.add(new Rect(0, 0, 0, 0, Color.red));
 		} else if (triCheck) {
 
 		} else if (cirCheck) {
-
+			figureCount = cirs.size();
+			this.cirs.add(new Cir(0, 0, 0, 0, 0, 0, Color.red));
 		}
 		this.startX = e.getX();
 		this.startY = e.getY();
-		this.rects.add(new Rect(0, 0, 0, 0, Color.red));
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
+		if (rectCheck) {
+			int XX = 0, YY = 0, W = 0, H = 0;
 
-		int XX = 0, YY = 0, W = 0, H = 0;
+			if (shiftPressed) {
+				if (e.getX() > startX && e.getY() > startY) {
+					XX = startX;
+					YY = startY;
+					W = e.getX() - XX;
+					H = e.getX() - XX;
+				} else if (e.getX() > startX && e.getY() < startY) {
 
-		if (shiftPressed) {
-			if (e.getX() > startX && e.getY() > startY) {
-				XX = startX;
-				YY = startY;
-				W = e.getX() - XX;
-				H = e.getX() - XX;
-			} else if (e.getX() > startX && e.getY() < startY) {
+					XX = startX;
+					YY = e.getY();
+					H = startY - e.getY();
+					W = H;
 
-				XX = startX;
-				YY = e.getY();
-				H = startY - e.getY();
-				W = H;
+				} else if (e.getX() < startX && e.getY() < startY) {
+					H = startY - e.getY();
+					W = H;
+					XX = startX - W;
+					YY = startY - H;
+				} else if (e.getX() < startX && e.getY() > startY) {
+					XX = e.getX();
+					YY = startY;
+					W = startX - e.getX();
+					H = W;
+				}
 
-			} else if (e.getX() < startX && e.getY() < startY) {
-				H = startY - e.getY();
-				W = H;
-				XX = startX - W;
-				YY = startY - H;
-			} else if (e.getX() < startX && e.getY() > startY) {
-				XX = e.getX();
-				YY = startY;
-				W = startX - e.getX();
-				H = W;
-			}
-
-		} else {
-			if (e.getX() > startX) {
-				XX = startX;
-				W = e.getX() - XX;
 			} else {
-				XX = e.getX();
-				W = startX - e.getX();
-			}
+				if (e.getX() > startX) {
+					XX = startX;
+					W = e.getX() - XX;
+				} else {
+					XX = e.getX();
+					W = startX - e.getX();
+				}
 
-			if (e.getY() > startY) {
-				YY = startY;
-				H = e.getY() - YY;
-			} else {
-				YY = e.getY();
-				H = startY - e.getY();
+				if (e.getY() > startY) {
+					YY = startY;
+					H = e.getY() - YY;
+				} else {
+					YY = e.getY();
+					H = startY - e.getY();
+				}
 			}
+			this.rects.set(figureCount, new Rect(XX, YY, W, H, Color.red));
+		} else if (triCheck) {
+
+		} else if (cirCheck) {
+			int XX = 0, YY = 0, W = 0, H = 0;
+
+			if (shiftPressed) {
+				if (e.getX() > startX && e.getY() > startY) {
+					XX = startX;
+					YY = startY;
+					W = e.getX() - XX;
+					H = e.getX() - XX;
+				} else if (e.getX() > startX && e.getY() < startY) {
+
+					XX = startX;
+					YY = e.getY();
+					H = startY - e.getY();
+					W = H;
+
+				} else if (e.getX() < startX && e.getY() < startY) {
+					H = startY - e.getY();
+					W = H;
+					XX = startX - W;
+					YY = startY - H;
+				} else if (e.getX() < startX && e.getY() > startY) {
+					XX = e.getX();
+					YY = startY;
+					W = startX - e.getX();
+					H = W;
+				}
+
+			} else {
+				if (e.getX() > startX) {
+					XX = startX;
+					W = e.getX() - XX;
+				} else {
+					XX = e.getX();
+					W = startX - e.getX();
+				}
+
+				if (e.getY() > startY) {
+					YY = startY;
+					H = e.getY() - YY;
+				} else {
+					YY = e.getY();
+					H = startY - e.getY();
+				}
+			}
+			this.cirs.set(figureCount, new Cir(XX, YY, W, H, W, H, Color.red));
 		}
-		this.rects.set(figureCount, new Rect(XX, YY, W, H, Color.red));
-
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		this.rects.get(figureCount).setC(Color.green);
+		if (rectCheck) {
+			this.rects.get(figureCount).setC(Color.green);
+		} else if (triCheck) {
+
+		} else if (cirCheck) {
+			this.cirs.get(figureCount).setC(Color.blue);
+		}
 	}
 
 }
