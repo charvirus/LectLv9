@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 
@@ -14,8 +15,8 @@ public class Panel extends MyUtil {
 	public JButton rectButton = new JButton("□");
 	public JButton triButton = new JButton("△");
 	public JButton cirButton = new JButton("○");
-
-	private Rect rect[] = null;
+	private ArrayList<Rect> rects = new ArrayList<>();
+	private Rect rect = null;
 	int figureCount = 0;
 	private boolean shiftPressed = false;
 	private boolean rectCheck = true;
@@ -61,14 +62,10 @@ public class Panel extends MyUtil {
 		g.setColor(Color.blue);
 		g.drawPolygon(xxx, yyy, 3);
 		// 네모 그리기 (스레드)
-		if (rect != null) {
-			for (int i = 0; i < rect.length; i++) {
-				if (this.rect != null) {
-					g.setColor(this.rect[i].getC());
-					g.drawRect(this.rect[i].getX(), this.rect[i].getY(), this.rect[i].getWidth(),
-							this.rect[i].getHeight());
-				}
-			}
+		for (int i = 0; i < rects.size(); i++) {
+			g.setColor(this.rects.get(i).getC());
+			g.drawRect(this.rects.get(i).getX(), this.rects.get(i).getY(), this.rects.get(i).getWidth(),
+					this.rects.get(i).getHeight());
 		}
 		requestFocusInWindow();
 		repaint();
@@ -97,7 +94,6 @@ public class Panel extends MyUtil {
 			rectCheck = true;
 			triCheck = false;
 			cirCheck = false;
-			System.out.println("rect 눌림");
 		} else if (button == triButton) {
 			rectButton.setEnabled(true);
 			triButton.setEnabled(false);
@@ -105,7 +101,6 @@ public class Panel extends MyUtil {
 			rectCheck = false;
 			triCheck = true;
 			cirCheck = false;
-			System.out.println("tri 눌림");
 		} else if (button == cirButton) {
 			rectButton.setEnabled(true);
 			triButton.setEnabled(true);
@@ -113,26 +108,13 @@ public class Panel extends MyUtil {
 			rectCheck = false;
 			triCheck = false;
 			cirCheck = true;
-			System.out.println("cir 눌림");
 		}
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
 		if (rectCheck) {
-			if (rect == null) {
-				rect = new Rect[1];
-				rect[0] = new Rect(0, 0, 0, 0, Color.white);
-				this.figureCount = 0;
-			} else {
-				Rect tempRect[] = rect;
-				this.figureCount = rect.length;
-				rect = new Rect[this.figureCount + 1];
-				rect[figureCount] = new Rect(0, 0, 0, 0, Color.white);
-				for (int i = 0; i < tempRect.length; i++) {
-					rect[i] = tempRect[i];
-				}
-			}
+			figureCount = rects.size();
 		} else if (triCheck) {
 
 		} else if (cirCheck) {
@@ -140,12 +122,14 @@ public class Panel extends MyUtil {
 		}
 		this.startX = e.getX();
 		this.startY = e.getY();
+		this.rects.add(new Rect(0, 0, 0, 0, Color.red));
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
 
 		int XX = 0, YY = 0, W = 0, H = 0;
+
 		if (shiftPressed) {
 			if (e.getX() > startX && e.getY() > startY) {
 				XX = startX;
@@ -188,13 +172,13 @@ public class Panel extends MyUtil {
 				H = startY - e.getY();
 			}
 		}
-		this.rect[figureCount] = new Rect(XX, YY, W, H, Color.red);
+		this.rects.set(figureCount, new Rect(XX, YY, W, H, Color.red));
 
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		this.rect[figureCount].setC(Color.green);
+		this.rects.get(figureCount).setC(Color.green);
 	}
 
 }
