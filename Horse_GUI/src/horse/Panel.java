@@ -2,6 +2,7 @@ package horse;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.util.Random;
 
 public class Panel extends MyUtil {
@@ -13,7 +14,7 @@ public class Panel extends MyUtil {
 	private JLabel image[] = new JLabel[5];
 //	private JLabel image = new JLabel(new ImageIcon(im));
 	private ImageIcon icon[] = new ImageIcon[5];
-
+	private int n = 1;
 	private final int ENDX = 750;
 	private int rank[] = new int[5];
 
@@ -22,7 +23,24 @@ public class Panel extends MyUtil {
 		setBounds(0, 0, 900, 700);
 		setButton();
 		setHorse();
+	}
 
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		JButton button = (JButton) e.getSource();
+		if (button == start) {
+			while (true) {
+				if (stop()) {
+					break;
+				}
+				stepByStep();
+				try {
+					Thread.sleep(300);
+				}catch (Exception e1) {
+					// TODO: handle exception
+				}
+			}
+		}
 	}
 
 	@Override
@@ -32,6 +50,7 @@ public class Panel extends MyUtil {
 		g.drawLine(ENDX, 50, ENDX, 450);
 		for (int i = 0; i < horses.length; i++) {
 			g.drawImage(horses[i].getImage().getImage(), horses[i].getX(), horses[i].getY(), null);
+			
 		}
 		repaint();
 	}
@@ -56,24 +75,35 @@ public class Panel extends MyUtil {
 	}
 
 	private void stepByStep() {
-		while (true) {
-			boolean goal = false;
-			for (int i = 0; i < horses.length; i++) {
-				if (this.horses[i].getState() == Horse.RUN) {
-					int jump = ran.nextInt(5);
-					int xx = this.horses[i].getX() + jump;
-					if (xx < this.ENDX - this.horses[i].getW() - 1) {
-						this.horses[i].setX(xx);
-					} else {
-						if (goal) {
-							i--;
-							break;
-						} else {
+		boolean goal = false;
 
-						}
+		for (int i = 0; i < horses.length; i++) {
+			if (this.horses[i].getState() == Horse.RUN) {
+				int jump = ran.nextInt(5);
+				int xx = this.horses[i].getX() + jump;
+				if (xx < this.ENDX - this.horses[i].getW() - 1) {
+					this.horses[i].setX(xx);
+				} else {
+					if (goal) {
+						i--;
+						break;
+					} else {
+						this.horses[i].setX(ENDX - this.horses[i].getW());
+						goal = true;
+						this.rank[i] = n;
+						n++;
 					}
 				}
+				this.horses[i].setX(xx);
 			}
 		}
+
+	}
+
+	private boolean stop() {
+		if (this.n > this.rank.length) {
+			return true;
+		}
+		return false;
 	}
 }
