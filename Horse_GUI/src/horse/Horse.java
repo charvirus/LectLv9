@@ -5,8 +5,8 @@ import javax.swing.ImageIcon;
 public class Horse {
 	
 	// state
-	public final int RUN = 0;
-	public final int GOAL = 1;
+	public final static int RUN = 0;
+	public final static int GOAL = 1;
 
 	private int num;
 	private int x, y, w, h;
