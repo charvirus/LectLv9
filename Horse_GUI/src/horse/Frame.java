@@ -1,27 +1,38 @@
 package horse;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 
-public class Frame extends JFrame implements ActionListener {
+import controller.RacingPanel;
 
-	Panel pan = new Panel();
+
+public class Frame extends JFrame  {
+
+	public static Dimension dm = Toolkit.getDefaultToolkit().getScreenSize();
+
+	public static final int W = dm.width;
+	public static final int H = dm.height;
+
+	public static final int WIDTH = 1000;
+	public static final int HEIGHT = 700;
+
+	private RacingPanel rp = new RacingPanel();
+
 
 	public Frame() {
 		super("Horse");
 		setLayout(null);
-		setBounds(0, 0, 900, 600);
+		setBounds(W / 2 - WIDTH / 2, H / 2 - HEIGHT / 2, WIDTH, HEIGHT);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		add(pan);
+		add(rp);
 		setVisible(true);
 		revalidate();
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-
+		
+		rp.run();
 	}
 
 }

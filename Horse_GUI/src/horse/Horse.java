@@ -1,9 +1,10 @@
 package horse;
 
-import javax.swing.ImageIcon;
+import javax.swing.*;
+import java.awt.*;
 
 public class Horse {
-	
+
 	// state
 	public final static int RUN = 0;
 	public final static int GOAL = 1;
@@ -16,20 +17,24 @@ public class Horse {
 	private ImageIcon image;
 
 	private int rank;
-	
-	
-	
-	
-	public Horse(int num, int x, int y, int w, int h, int state, String filename, ImageIcon image, int rank) {
+	private String record;
+
+	public Horse(int num, int x, int y, int w, int h, String fileName) {
 		this.num = num;
 		this.x = x;
 		this.y = y;
 		this.w = w;
 		this.h = h;
-		this.state = state;
-		this.filename = filename;
-		this.image = image;
-		this.rank = rank;
+		this.filename = fileName;
+		this.image = new ImageIcon(new ImageIcon(fileName).getImage().getScaledInstance(w, h, Image.SCALE_SMOOTH));
+	}
+
+	public String getRecord() {
+		return record;
+	}
+
+	public void setRecord(String record) {
+		this.record = record;
 	}
 
 	public int getNum() {
