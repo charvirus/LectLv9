@@ -28,7 +28,7 @@ public class GamePanel extends MyUtil {
 		int YY = Frame.HEIGHT / 2 - WHSIZE / 2;
 		for (int i = 0; i < map.length; i++) {
 			for (int j = 0; j < map[i].length; j++) {
-				map[i][j] = new Map(XX, YY, BLOCKSIZE, BLOCKSIZE, Map.EMPTY, String.format("images/tile%d.png", 1));
+				map[i][j] = new Map(Map.ROAD ,XX, YY, BLOCKSIZE, BLOCKSIZE);
 				XX += BLOCKSIZE;
 			}
 			XX = Frame.WIDTH / 2 - WHSIZE / 2;
@@ -42,11 +42,11 @@ public class GamePanel extends MyUtil {
 		for (int i = 0; i < map.length; i++) {
 			for (int j = 0; j < map[i].length; j++) {
 				Map m = this.map[i][j];
-				System.out.println(m.getFilename());
 				g.drawImage(m.getImage().getImage(), m.getX(), m.getY(), null);
 
 			}
 		}
+
 		repaint();
 	}
 
@@ -56,11 +56,15 @@ public class GamePanel extends MyUtil {
 			int wallY = random.nextInt(SIZE);
 			int wallX = random.nextInt(SIZE);
 			Map m = this.map[wallY][wallX];
-			if (m.getStatus() == Map.EMPTY) {
-				m.setStatus(Map.WALL);
-				m.setFilename(String.format("images/tile%d.png", 2));
+			if (m.getState() == Map.ROAD) {
+				m.setState(Map.WALL);
+			
+			} else {
+				i--;
 			}
 
 		}
 	}
+	
+	
 }
