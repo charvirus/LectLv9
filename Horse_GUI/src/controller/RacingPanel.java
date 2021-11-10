@@ -79,9 +79,8 @@ public class RacingPanel extends MyUtil implements Runnable {
 		for (int i = 0; i < SIZE; i++) {
 			Horse h = this.horses[i];
 			g.drawImage(h.getImage().getImage(), h.getX(), h.getY(), null);
-
-			// rank
 			g.drawLine(30, h.getY() + h.getH(), Frame.WIDTH - 30, h.getY() + h.getH());
+			// rank
 			if (h.getState() == h.GOAL) {
 				g.setFont(new Font("", Font.PLAIN, 20));
 				g.drawString(h.getRecord(), Frame.WIDTH - 200, h.getY() + h.getH() / 2);
@@ -122,6 +121,8 @@ public class RacingPanel extends MyUtil implements Runnable {
 						goal = !goal;
 					} else if (tempX >= Frame.WIDTH - h.getW() - 30) {
 						i--;
+						// 되돌아가는 말이 발생할 경우 -> ms 홀딩하는 변수를 활용
+						
 						break;
 					}
 

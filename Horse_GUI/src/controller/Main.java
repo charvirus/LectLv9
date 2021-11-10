@@ -1,4 +1,6 @@
-package horse;
+package controller;
+
+import horse.Frame;
 
 public class Main {
 
