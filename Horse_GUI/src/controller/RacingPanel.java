@@ -92,7 +92,7 @@ public class RacingPanel extends MyUtil implements Runnable {
 		try {
 			Thread.sleep(50);
 		} catch (Exception e) {
-			// TODO: handle exception
+			
 		}
 		update();
 
@@ -115,7 +115,7 @@ public class RacingPanel extends MyUtil implements Runnable {
 
 					if (tempX >= Frame.WIDTH - h.getW() - 30 && !goal) {
 						h.setState(h.GOAL);
-						h.setRecord(String.format("%4d.%3d", this.ms / 1000, this.ms % 1000));
+						h.setRecord(String.format("%4d.%03d", this.ms / 1000, this.ms % 1000));
 						h.setRank(rank);
 						this.rank++;
 						goal = !goal;
@@ -123,7 +123,7 @@ public class RacingPanel extends MyUtil implements Runnable {
 						i--;
 						// 되돌아가는 말이 발생할 경우 -> ms 홀딩하는 변수를 활용
 						
-						break;
+						continue;
 					}
 
 					h.setX(tempX);
@@ -144,7 +144,7 @@ public class RacingPanel extends MyUtil implements Runnable {
 			try {
 				Thread.sleep(1);
 			} catch (Exception e) {
-				// TODO: handle exception
+				
 			}
 		}
 	}
