@@ -12,13 +12,17 @@ import model.MyUtil;
 
 public class GamePanel extends MyUtil {
 	private Random random = new Random();
-	private boolean goal = false;
 	private boolean check = false;
-
+	private boolean boxNear = false;
+	private int boxNum = -1;
+	private int ballCnt = 0;
+	private int checkCnt = 0;
 	private final int WHSIZE = 500;
 	private final int SIZE = 10;
 	private final int BLOCKSIZE = WHSIZE / SIZE;
 	private Map[][] map = new Map[SIZE][SIZE];
+	private int ball[][] = null;
+	private int goal[][] = null;
 	private int pY, pX;
 	private int ballY, ballX;
 	private int dir = 0; // 1 위(38) 2 왼쪽(37) 3 아래(40) 4 오른쪽(39)
@@ -27,12 +31,19 @@ public class GamePanel extends MyUtil {
 		setLayout(null);
 		setBounds(Frame.WIDTH / 2 - WHSIZE / 2, Frame.HEIGHT / 2 - WHSIZE / 2, WHSIZE, WHSIZE);
 		setMap();
+		setBallCnt();
 		setWall();
-		setGoal();
 		setBall();
+		setGoal();
 		setPlayer();
 		setFocusable(true);
 		addKeyListener(this);
+	}
+
+	private void setBallCnt() {
+
+		ballCnt = Integer.parseInt(JOptionPane.showInputDialog("박스의 수를 입력해주세요"));
+
 	}
 
 	private void setMap() {
@@ -65,36 +76,49 @@ public class GamePanel extends MyUtil {
 	}
 
 	private void setGoal() {
-		while (true) {
-			int y = random.nextInt(SIZE);
-			int x = random.nextInt(SIZE);
+		goal = new int[ballCnt][2];
 
-			if (map[y][x].getState() == Map.ROAD) {
-				map[y][x].setState(Map.GOAL);
-				break;
+		for (int j = 0; j < ballCnt; j++) {
+
+			while (true) {
+				int y = random.nextInt(SIZE);
+				int x = random.nextInt(SIZE);
+
+				if (map[y][x].getState() == Map.ROAD) {
+					map[y][x].setState(Map.GOAL);
+					goal[j][0] = y;
+					goal[j][1] = x;
+
+					break;
+				}
 			}
 		}
 	}
 
 	private void setBall() {
-		while (true) {
-			int y = random.nextInt(SIZE - 2) + 1;
-			int x = random.nextInt(SIZE - 2) + 1;
-			if (map[y][x].getState() == Map.ROAD) {
-				int check = 0;
-				for (int i = -1; i <= 1; i++) {
-					if (y + i >= 0 && y + i < SIZE && map[y + i][x].getState() != Map.ROAD) {
-						check++;
+		ball = new int[ballCnt][2];
+		for (int j = 0; j < ballCnt; j++) {
+			while (true) {
+				int y = random.nextInt(SIZE - 2) + 1;
+				int x = random.nextInt(SIZE - 2) + 1;
+				if (map[y][x].getState() == Map.ROAD) {
+					int check = 0;
+					for (int i = -1; i <= 1; i++) {
+						if (y + i >= 0 && y + i < SIZE && map[y + i][x].getState() != Map.ROAD) {
+							check++;
+						}
+						if (x + i >= 0 && x + i < SIZE && map[y][x + i].getState() != Map.ROAD) {
+							check++;
+						}
 					}
-					if (x + i >= 0 && x + i < SIZE && map[y][x + i].getState() != Map.ROAD) {
-						check++;
+					if (check <= 1) {
+						this.map[y][x].setState(Map.BALL);
+						ballY = y;
+						ballX = x;
+						ball[j][0] = y;
+						ball[j][1] = x;
+						break;
 					}
-				}
-				if (check <= 1) {
-					ballY = y;
-					ballX = x;
-					this.map[y][x].setState(Map.BALL);
-					break;
 				}
 			}
 		}
@@ -149,7 +173,7 @@ public class GamePanel extends MyUtil {
 		int bxx = ballX;
 		// 1 위(38) 2 왼쪽(37) 3 아래(40) 4 오른쪽(39)
 		if (dir == 1) {
-			if (0 <= yy && yy < SIZE-1) {
+			if (0 <= yy && yy < SIZE - 1) {
 				yy++;
 				byy++;
 			}
@@ -165,28 +189,53 @@ public class GamePanel extends MyUtil {
 				byy--;
 			}
 		} else if (dir == 4) {
-			if (0 <= xx && xx < SIZE-1) {
+			if (0 <= xx && xx < SIZE - 1) {
 				xx++;
 				bxx++;
 			}
 		}
 
-		if (yy < 0 || yy > SIZE - 1 || xx < 0 || xx > SIZE - 1 || map[yy][xx].getState() == Map.WALL
-				|| map[yy][xx].getState() == Map.GOAL) {
+		if (yy < 0 || yy > SIZE - 1 || xx < 0 || xx > SIZE - 1 || map[yy][xx].getState() == Map.WALL) {
 			check = true;
+		}
+		for (int i = 0; i < ballCnt; i++) {
+			if (yy == ball[i][0] && xx == ball[i][1]) {
+				boxNear = true;
+				boxNum = i;
+				
+			}
 		}
 		if (this.map[yy][xx].getState() == Map.BALL) {
 			if (byy < 0 || byy > SIZE - 1 || bxx < 0 || bxx > SIZE - 1 || map[byy][bxx].getState() == Map.WALL) {
 				check = true;
 			} else if (map[byy][bxx].getState() == Map.GOAL) {
-				goal = true;
 				map[pY][pX].setState(Map.ROAD);
 				pY = yy;
 				pX = xx;
 				map[pY][pX].setState(Map.PLAYER);
 				map[byy][bxx].setState(Map.BALL_ENTERED);
-				JOptionPane.showMessageDialog(null, "Goal");
 				check = true;
+				checkCnt++;
+				ballY = byy;
+				ballX = bxx;
+
+			}
+			if (!check) {
+				ballY = byy;
+				ballX = bxx;
+				map[ballY][ballX].setState(Map.BALL);
+			}
+			System.out.println(ballY + ":" + ballX);
+		} else if (this.map[yy][xx].getState() == Map.BALL_ENTERED) {
+			if (byy < 0 || byy > SIZE - 1 || bxx < 0 || bxx > SIZE - 1 || map[byy][bxx].getState() == Map.WALL) {
+				check = true;
+			} else if (map[byy][bxx].getState() == Map.ROAD) {
+				map[pY][pX].setState(Map.ROAD);
+				pY = yy;
+				pX = xx;
+				map[pY][pX].setState(Map.PLAYER);
+				map[byy][bxx].setState(Map.BALL);
+				checkCnt--;
 			}
 			if (!check) {
 				ballY = byy;
@@ -194,11 +243,21 @@ public class GamePanel extends MyUtil {
 				map[ballY][ballX].setState(Map.BALL);
 			}
 		}
+
 		if (!check) {
 			map[pY][pX].setState(Map.ROAD);
+			for (int i = 0; i < ballCnt; i++) {
+				if (map[goal[i][0]][goal[i][1]].getState() == Map.ROAD) {
+					map[goal[i][0]][goal[i][1]].setState(Map.GOAL);
+				}
+			}
 			pY = yy;
 			pX = xx;
 			map[pY][pX].setState(Map.PLAYER);
+		}
+		if (checkCnt == ballCnt) {
+
+			JOptionPane.showMessageDialog(null, "Goal");
 		}
 	}
 
