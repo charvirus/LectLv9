@@ -17,6 +17,12 @@ public class GamePanel extends MyUtil {
 	private int boxNum = -1;
 	private int ballCnt = 0;
 	private int checkCnt = 0;
+	// 1 위(38) 2 왼쪽(37) 3 아래(40) 4 오른쪽(39)
+
+	private final int UP = 40;
+	private final int LEFT = 37;
+	private final int DOWN = 38;
+	private final int RIGHT = 39;
 	private final int WHSIZE = 500;
 	private final int SIZE = 10;
 	private final int BLOCKSIZE = WHSIZE / SIZE;
@@ -59,7 +65,7 @@ public class GamePanel extends MyUtil {
 	}
 
 	private void setWall() {
-		int walls = random.nextInt(SIZE - 3) + 3;
+		int walls = random.nextInt(SIZE / 2) + SIZE / 2;
 		for (int i = 0; i < walls; i++) {
 			int wallY = random.nextInt(SIZE);
 			int wallX = random.nextInt(SIZE);
@@ -144,19 +150,20 @@ public class GamePanel extends MyUtil {
 				g.drawImage(m.getImage().getImage(), m.getX(), m.getY(), null);
 			}
 		}
-
+		requestFocusInWindow(); // 포커스가 불특정하게 날아가는걸 방지함
 		repaint();
 	}
 
+	// 1 위(40) 2 왼쪽(37) 3 아래(38) 4 오른쪽(39)
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == 40) {
+		if (e.getKeyCode() == UP) {
 			this.dir = 1;
-		} else if (e.getKeyCode() == 37) {
+		} else if (e.getKeyCode() == LEFT) {
 			this.dir = 2;
-		} else if (e.getKeyCode() == 38) {
+		} else if (e.getKeyCode() == DOWN) {
 			this.dir = 3;
-		} else if (e.getKeyCode() == 39) {
+		} else if (e.getKeyCode() == RIGHT) {
 			this.dir = 4;
 		}
 		move();
@@ -199,7 +206,7 @@ public class GamePanel extends MyUtil {
 		if (boxNear) {
 			byy = ball[boxNum][0];
 			bxx = ball[boxNum][1];
-			if (dir == 1) {	
+			if (dir == 1) {
 				byy++;
 			} else if (dir == 2) {
 				bxx--;
