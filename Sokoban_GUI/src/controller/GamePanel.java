@@ -24,7 +24,6 @@ public class GamePanel extends MyUtil {
 	private int ball[][] = null;
 	private int goal[][] = null;
 	private int pY, pX;
-	private int ballY, ballX;
 	private int dir = 0; // 1 위(38) 2 왼쪽(37) 3 아래(40) 4 오른쪽(39)
 
 	public GamePanel() {
@@ -113,8 +112,6 @@ public class GamePanel extends MyUtil {
 					}
 					if (check <= 1) {
 						this.map[y][x].setState(Map.BALL);
-						ballY = y;
-						ballX = x;
 						ball[j][0] = y;
 						ball[j][1] = x;
 						break;
@@ -169,29 +166,24 @@ public class GamePanel extends MyUtil {
 		check = false;
 		int yy = pY;
 		int xx = pX;
-		int byy = ballY;
-		int bxx = ballX;
+		int byy = -1;
+		int bxx = -1;
 		// 1 위(38) 2 왼쪽(37) 3 아래(40) 4 오른쪽(39)
 		if (dir == 1) {
 			if (0 <= yy && yy < SIZE - 1) {
 				yy++;
-				byy++;
 			}
-
 		} else if (dir == 2) {
 			if (0 < xx && xx < SIZE) {
 				xx--;
-				bxx--;
 			}
 		} else if (dir == 3) {
 			if (0 < yy && yy < SIZE) {
 				yy--;
-				byy--;
 			}
 		} else if (dir == 4) {
 			if (0 <= xx && xx < SIZE - 1) {
 				xx++;
-				bxx++;
 			}
 		}
 
@@ -202,7 +194,19 @@ public class GamePanel extends MyUtil {
 			if (yy == ball[i][0] && xx == ball[i][1]) {
 				boxNear = true;
 				boxNum = i;
-				
+			}
+		}
+		if (boxNear) {
+			byy = ball[boxNum][0];
+			bxx = ball[boxNum][1];
+			if (dir == 1) {	
+				byy++;
+			} else if (dir == 2) {
+				bxx--;
+			} else if (dir == 3) {
+				byy--;
+			} else if (dir == 4) {
+				bxx++;
 			}
 		}
 		if (this.map[yy][xx].getState() == Map.BALL) {
@@ -216,16 +220,15 @@ public class GamePanel extends MyUtil {
 				map[byy][bxx].setState(Map.BALL_ENTERED);
 				check = true;
 				checkCnt++;
-				ballY = byy;
-				ballX = bxx;
+				ball[boxNum][0] = byy;
+				ball[boxNum][1] = bxx;
 
 			}
 			if (!check) {
-				ballY = byy;
-				ballX = bxx;
-				map[ballY][ballX].setState(Map.BALL);
+				map[byy][bxx].setState(Map.BALL);
+				ball[boxNum][0] = byy;
+				ball[boxNum][1] = bxx;
 			}
-			System.out.println(ballY + ":" + ballX);
 		} else if (this.map[yy][xx].getState() == Map.BALL_ENTERED) {
 			if (byy < 0 || byy > SIZE - 1 || bxx < 0 || bxx > SIZE - 1 || map[byy][bxx].getState() == Map.WALL) {
 				check = true;
@@ -238,9 +241,9 @@ public class GamePanel extends MyUtil {
 				checkCnt--;
 			}
 			if (!check) {
-				ballY = byy;
-				ballX = bxx;
-				map[ballY][ballX].setState(Map.BALL);
+				map[byy][bxx].setState(Map.BALL);
+				ball[boxNum][0] = byy;
+				ball[boxNum][1] = bxx;
 			}
 		}
 
