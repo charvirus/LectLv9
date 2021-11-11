@@ -180,8 +180,13 @@ public class GamePanel extends MyUtil {
 				check = true;
 			} else if (map[byy][bxx].getState() == Map.GOAL) {
 				goal = true;
+				map[pY][pX].setState(Map.ROAD);
+				pY = yy;
+				pX = xx;
+				map[pY][pX].setState(Map.PLAYER);
 				map[byy][bxx].setState(Map.BALL_ENTERED);
 				JOptionPane.showMessageDialog(null, "Goal");
+				check = true;
 			}
 			if (!check) {
 				ballY = byy;
