@@ -3,12 +3,13 @@ package models;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import controller.MainPanel;
 
 import java.awt.event.*;
-import java.util.ArrayList;
+import java.util.Vector;
 
 public class SignInFrame extends JFrame implements ActionListener {
 
@@ -17,9 +18,9 @@ public class SignInFrame extends JFrame implements ActionListener {
 	private JLabel popUpId = new JLabel("ID : ");
 	private JLabel popUpPw = new JLabel("PW : ");
 	private JLabel popUpName = new JLabel("NAME : ");
-	JTextField inputId = new JTextField();
-	JTextField inputPw = new JTextField();
-	JTextField inputName = new JTextField();
+	public JTextField inputId = new JTextField();
+	public JTextField inputPw = new JTextField();
+	public JTextField inputName = new JTextField();
 
 	public SignInFrame() {
 
@@ -52,35 +53,23 @@ public class SignInFrame extends JFrame implements ActionListener {
 	}
 
 	private void addButton() {
-		this.btnAdd.setBounds(WHSIZE / 2 - 50, WHSIZE - 100, 80, 30);
-		this.btnAdd.addActionListener(this);
-		add(btnAdd);
+		MainPanel.add.setBounds(WHSIZE / 2 - 50, WHSIZE - 100, 80, 30);
+		MainPanel.add.addActionListener(this);
+		add(MainPanel.add);
+	}
+
+	public void adduser(String id, String pw, String name) {
+		Vector<String> temp = new Vector<>();
+		temp.add(id);
+		temp.add(pw);
+		temp.add(name);
+		MainPanel.setUser(temp);
+
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		JButton target = (JButton) e.getSource();
-		if (target == btnAdd) {
-			String id = inputId.getText();
-			String pw = inputPw.getText();
-			String name = inputName.getText();
-			ArrayList<String> temp = new ArrayList<>();
-			temp.add(id);
-			temp.add(pw);
-			temp.add(name);
-			MainPanel.setUser(temp);
-			
-			String data = "<html>";
-			for (int i = 0; i < MainPanel.getUsersSize(); i++) {
-				for (int j = 0; j < MainPanel.getUser(i).size(); j++) {
-					data += MainPanel.getUser(i).get(j) +" ";
-				}
-				data += "<br>";
-			}
-			data += "</html>";
-			MainPanel.setData(data);
-			this.dispose();
-		}
+		
 	}
 
 }
