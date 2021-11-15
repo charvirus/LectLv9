@@ -20,6 +20,7 @@ public class CoffeePanel extends JPanel implements ActionListener {
 
 	private JButton btn16s[] = new JButton[16];
 	private Item items[] = new Item[16];
+	private TablePanel tableData = TablePanel.getInstance();
 	private int btn16_WH = 100;
 	private int btn16Start_X = 35;
 	private int tBtn_H = 30;
@@ -70,7 +71,7 @@ public class CoffeePanel extends JPanel implements ActionListener {
 		int x = btn16Start_X;
 		int y = tBtn_H;
 		for (int i = 0; i < btn16s.length; i++) {
-			items[i] = new Item(i + 1, x, y, btn16_WH, btn16_WH);
+			items[i] = new Item(i + 1, x, y, btn16_WH, btn16_WH, 10);
 			items[i].setCategory(Item.COFFEE);
 			btn16s[i] = new JButton(items[i].getImage());
 			btn16s[i].setBounds(items[i].getX(), items[i].getY(), items[i].getW(), items[i].getH());
@@ -93,13 +94,29 @@ public class CoffeePanel extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		JButton target = (JButton) e.getSource();
+		Vector<Vector<String>> tempData = tableData.getData();
+		boolean check = false;
+		int idx = -1;
 		for (int i = 0; i < items.length; i++) {
 			if (target == btn16s[i]) {
-				Vector<String> temp = new Vector<>();
-				temp.add(items[i].getName());
-				temp.add(String.valueOf(items[i].getPrice()));
-				TablePanel tp = TablePanel.getInstance();
-				tp.addData(temp);
+
+				for (int j = 0; j < tempData.size(); j++) {
+					if (items[i].getName().equals(tempData.get(j).get(0))) {
+						check = true;
+						idx = j;
+					}
+				}
+				
+				if (check) {
+					tempData.get(idx).get(1);
+				} else {
+					Vector<String> temp = new Vector<>();
+					temp.add(items[i].getName());
+					
+					temp.add(String.valueOf(items[i].getPrice()));
+					TablePanel tp = TablePanel.getInstance();
+					tp.addData(temp);
+				}
 			}
 		}
 	}

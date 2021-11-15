@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 import models.Item;
 import models.KioskFrame;
 
-public class TeaPanel extends JPanel implements ActionListener{
+public class TeaPanel extends JPanel implements ActionListener {
 	private int WH = 500;
 
 	private JButton btn16s[] = new JButton[16];
@@ -66,7 +66,7 @@ public class TeaPanel extends JPanel implements ActionListener{
 		int x = btn16Start_X;
 		int y = tBtn_H;
 		for (int i = 0; i < btn16s.length; i++) {
-			items[i] = new Item(i + 1, x, y, btn16_WH, btn16_WH);
+			items[i] = new Item(i + 1, x, y, btn16_WH, btn16_WH, 10);
 			items[i].setCategory(Item.TEA);
 			btn16s[i] = new JButton(items[i].getImage());
 			btn16s[i].setBounds(items[i].getX(), items[i].getY(), items[i].getW(), items[i].getH());
@@ -100,5 +100,4 @@ public class TeaPanel extends JPanel implements ActionListener{
 		}
 	}
 
-		
 }

@@ -44,8 +44,6 @@ public class KioskFrame extends JFrame implements ActionListener {
 		revalidate();
 	}
 
-	
-
 	private void setTopButton() {
 		coffee_Btn.setBounds(WIDTH / 2 - tBtn_W - 2, tBtn_H, tBtn_W, tBtn_H);
 		coffee_Btn.addActionListener(this);

@@ -12,15 +12,18 @@ public class Item {
 	private int x, y, w, h;
 	private int category; // 0 coffee 1 tea
 	private int price;
+	private int remain;
+	private int orderCount;
 	private String filename;
 	private ImageIcon image;
 
-	public Item(int num, int x, int y, int w, int h) {
+	public Item(int num, int x, int y, int w, int h, int remain) {
 		this.num = num;
 		this.x = x;
 		this.y = y;
 		this.w = w;
 		this.h = h;
+		this.remain = remain;
 	}
 
 	public String getName() {
@@ -90,4 +93,21 @@ public class Item {
 		return image;
 	}
 
+	public int getRemain() {
+		return remain;
+	}
+
+	public void setRemain(int remain) {
+		this.remain = remain;
+	}
+
+	public int getOrderCount() {
+		return orderCount;
+	}
+
+	public void setOrderCount(int orderCount) {
+		this.orderCount = orderCount;
+	}
+	
+	
 }

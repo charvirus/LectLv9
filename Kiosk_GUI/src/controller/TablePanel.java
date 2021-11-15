@@ -31,6 +31,7 @@ public class TablePanel extends Panel {
 
 	private void setTable() {
 		colName.add("Name");
+		colName.add("Count");
 		colName.add("Price");
 		table = new JTable(data, colName);
 		table.setBounds(0, 0, WH, 200);
@@ -44,7 +45,14 @@ public class TablePanel extends Panel {
 		this.data.add(data);
 		table.revalidate();
 		repaint();
-		System.out.println(this.data.size());
 	}
 
+	public Vector<Vector<String>> getData() {
+		return data;
+	}
+
+	public void setData(Vector<Vector<String>> data) {
+		this.data = data;
+	}
+	
 }
