@@ -64,7 +64,6 @@ public class SignInFrame extends JFrame implements ActionListener {
 		temp.add(pw);
 		temp.add(name);
 		MainPanel.setUser(temp);
-
 	}
 
 	@Override

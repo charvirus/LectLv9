@@ -134,6 +134,7 @@ public class MainPanel extends MyUtil {
 		} else if (target == login) {
 
 		} else if(target == add) {
+			
 			String id = sif.inputId.getText();
 			String pw = sif.inputPw.getText();
 			String name = sif.inputName.getText();

@@ -1,12 +1,12 @@
 
 package controller;
 
-import models.Frame;
+import models.KioskFrame;
 
 public class Main {
 
 	public static void main(String[] args) {
-		Frame start = new Frame();
+		KioskFrame start = new KioskFrame();
 
 	}
 
