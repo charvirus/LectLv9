@@ -28,6 +28,7 @@ public class KioskFrame extends JFrame implements ActionListener {
 	private TablePanel tablePanel = TablePanel.getInstance();
 	private JButton coffee_Btn = new JButton("커피");
 	private JButton tea_Btn = new JButton("차/에이드");
+	private JButton purchase_Btn = new JButton("결제");
 	private int tBtn_W = 85;
 	private int tBtn_H = 30;
 
@@ -38,6 +39,7 @@ public class KioskFrame extends JFrame implements ActionListener {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		// setContentPane(); Frame 자체를 바꾸는데 효율적
 		setTopButton();
+		setPurchaseButton();
 		add(coffeePanel);
 		add(tablePanel);
 		setVisible(true);
@@ -51,6 +53,12 @@ public class KioskFrame extends JFrame implements ActionListener {
 		tea_Btn.setBounds(WIDTH / 2 + 2, tBtn_H, tBtn_W, tBtn_H);
 		tea_Btn.addActionListener(this);
 		add(tea_Btn, 0);
+	}
+
+	private void setPurchaseButton() {
+		purchase_Btn.setBounds(KioskFrame.WIDTH / 2 - tBtn_W / 2, 850, tBtn_W, tBtn_H);
+		purchase_Btn.addActionListener(this);
+		add(purchase_Btn,0);
 	}
 
 	@Override

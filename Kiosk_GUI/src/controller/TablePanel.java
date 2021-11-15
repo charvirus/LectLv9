@@ -47,6 +47,11 @@ public class TablePanel extends Panel {
 		repaint();
 	}
 
+	public void update() {
+		table.revalidate();
+		repaint();
+	}
+
 	public Vector<Vector<String>> getData() {
 		return data;
 	}
@@ -54,5 +59,5 @@ public class TablePanel extends Panel {
 	public void setData(Vector<Vector<String>> data) {
 		this.data = data;
 	}
-	
+
 }

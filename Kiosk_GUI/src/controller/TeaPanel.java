@@ -16,6 +16,7 @@ public class TeaPanel extends JPanel implements ActionListener {
 
 	private JButton btn16s[] = new JButton[16];
 	private Item items[] = new Item[16];
+	private TablePanel tableData = TablePanel.getInstance();
 	private int btn16_WH = 100;
 	private int btn16Start_X = 35;
 	private int tBtn_H = 30;
@@ -89,15 +90,34 @@ public class TeaPanel extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		JButton target = (JButton) e.getSource();
+		Vector<Vector<String>> tempData = tableData.getData();
+		boolean check = false;
+		int idx = -1;
 		for (int i = 0; i < items.length; i++) {
 			if (target == btn16s[i]) {
-				Vector<String> temp = new Vector<>();
-				temp.add(items[i].getName());
-				temp.add(String.valueOf(items[i].getPrice()));
-				TablePanel tp = TablePanel.getInstance();
-				tp.addData(temp);
+
+				for (int j = 0; j < tempData.size(); j++) {
+					if (items[i].getName().equals(tempData.get(j).get(0))) {
+						check = true;
+						idx = j;
+					}
+				}
+
+				if (check) {
+					int count = Integer.parseInt(tempData.get(idx).get(1));
+					count++;
+					tempData.get(idx).set(1, String.valueOf(count));
+					TablePanel tp = TablePanel.getInstance();
+					tp.update();
+				} else {
+					Vector<String> temp = new Vector<>();
+					temp.add(items[i].getName());
+					temp.add(String.valueOf(items[i].getPrice()));
+					TablePanel tp = TablePanel.getInstance();
+					tp.addData(temp);
+				}
 			}
 		}
-	}
 
+	}
 }

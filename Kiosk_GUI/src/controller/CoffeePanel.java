@@ -108,11 +108,15 @@ public class CoffeePanel extends JPanel implements ActionListener {
 				}
 				
 				if (check) {
-					tempData.get(idx).get(1);
+					int count = Integer.parseInt(tempData.get(idx).get(1));
+					count++;
+					tempData.get(idx).set(1,String.valueOf(count));
+					TablePanel tp = TablePanel.getInstance();
+					tp.update();
 				} else {
 					Vector<String> temp = new Vector<>();
 					temp.add(items[i].getName());
-					
+					temp.add("1");
 					temp.add(String.valueOf(items[i].getPrice()));
 					TablePanel tp = TablePanel.getInstance();
 					tp.addData(temp);
