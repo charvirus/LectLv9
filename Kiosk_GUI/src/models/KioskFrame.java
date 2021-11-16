@@ -11,6 +11,7 @@ import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 import controller.CoffeePanel;
 import controller.TablePanel;
@@ -34,13 +35,6 @@ public class KioskFrame extends JFrame implements ActionListener {
 	private JButton purchase_Btn = new JButton("결제");
 	private int tBtn_W = 85;
 	private int tBtn_H = 30;
-	private JLabel totalCountText = new JLabel("주문 수량");
-	private JLabel totalPriceText = new JLabel("총 가격");
-	private JLabel totalCount = new JLabel("0");
-	private JLabel totalPrice = new JLabel("0");
-	private int bottomLabel_CntX = 200;
-	private int bottomLabel_CntY = 800;
-
 	private static KioskFrame instance = new KioskFrame();
 
 	public static KioskFrame getInstance() {
@@ -55,7 +49,6 @@ public class KioskFrame extends JFrame implements ActionListener {
 		// setContentPane(); Frame 자체를 바꾸는데 효율적
 		setTopButton();
 		setPurchaseButton();
-		setBottomLabel();
 		add(coffeePanel);
 		add(tablePanel);
 		setVisible(true);
@@ -77,36 +70,6 @@ public class KioskFrame extends JFrame implements ActionListener {
 		add(purchase_Btn, 0);
 	}
 
-	private void setBottomLabel() {
-		totalCountText.setBounds(KioskFrame.WIDTH / 2 - bottomLabel_CntX, bottomLabel_CntY, 150, 40);
-		totalCountText.setFont(new Font("", Font.BOLD, 20));
-		add(totalCountText, 0);
-		totalCount.setBounds(KioskFrame.WIDTH / 2 - 75, bottomLabel_CntY, 150, 40);
-		totalCount.setFont(new Font("", Font.BOLD, 20));
-		add(totalCount, 0);
-
-		totalPriceText.setBounds(KioskFrame.WIDTH / 2, bottomLabel_CntY, 150, 40);
-		totalPriceText.setFont(new Font("", Font.BOLD, 20));
-		add(totalPriceText, 0);
-		totalPrice.setBounds(KioskFrame.WIDTH / 2 + 175, bottomLabel_CntY, 150, 40);
-		totalPrice.setFont(new Font("", Font.BOLD, 20));
-		add(totalPrice, 0);
-	}
-
-	public void updateBottomLabels() {
-		TablePanel tp = TablePanel.getInstance();
-		Vector<Vector<String>> data = tp.getData();
-		System.out.println(data.size());
-		int totalPrice = 0;
-		int totalCount = 0;
-		totalCount = data.size();
-		for(int i = 0;i<data.size();i++) {
-			totalPrice += Integer.parseInt(data.get(i).get(2));
-		}
-		totalCountText.setText(String.valueOf(totalCount));
-		totalPriceText.setText(String.valueOf(totalPrice));
-	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == coffee_Btn) {
@@ -120,7 +83,37 @@ public class KioskFrame extends JFrame implements ActionListener {
 			revalidate();
 			repaint();
 		} else if (e.getSource() == purchase_Btn) {
-
+			Vector<Vector<String>> datas = tablePanel.getData();
+			Item coffeeItems[] = coffeePanel.getCoffeeItemsList();
+			Item teaItems[] = teaPanel.getTeaItemsList();
+			int resetCountArr[] = new int[16];
+			for (int i = 0; i < coffeeItems.length; i++) {
+				for (int j = 0; j < datas.size(); j++) {
+					if (coffeeItems[i].getCategory() == Integer.parseInt(datas.get(j).get(4))
+							&& coffeeItems[i].getNum() == Integer.parseInt(datas.get(j).get(3))) {
+						coffeeItems[i].setRemain(coffeeItems[i].getRemain()
+								- Integer.parseInt(datas.get(j).get(1)));
+					}
+				}
+			}
+			
+			coffeePanel.setCount(resetCountArr);
+			
+			for (int i = 0; i < teaItems.length; i++) {
+				for (int j = 0; j < datas.size(); j++) {
+					if (teaItems[i].getCategory() == Integer.parseInt(datas.get(j).get(4))
+							&& teaItems[i].getNum() == Integer.parseInt(datas.get(j).get(3))) {
+						teaItems[i].setRemain(teaItems[i].getRemain()
+								- Integer.parseInt(datas.get(j).get(1)));
+					}
+				}
+			}
+			teaPanel.setCount(resetCountArr);
+			
+			tablePanel.resetTable();
+			JOptionPane.showMessageDialog(null, String.format("%d원을 결제하셨습니다.",tablePanel.getTotalPrice_i()));
+			tablePanel.revalidate();
+			tablePanel.repaint();
 		}
 	}
 

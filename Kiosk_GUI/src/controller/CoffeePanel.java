@@ -93,6 +93,10 @@ public class CoffeePanel extends JPanel implements ActionListener {
 		return items;
 	}
 
+	public void setItems(Item[] items) {
+		this.items = items;
+	}
+
 	public int[] getCount() {
 		return count;
 	}
@@ -129,8 +133,10 @@ public class CoffeePanel extends JPanel implements ActionListener {
 						Vector<String> temp = new Vector<>();
 						temp.add(items[i].getName());
 						temp.add("1");
+						temp.add(items[i].getPrice() + "");
+						temp.add(items[i].getNum() + "");
+						temp.add(items[i].getCategory() + "");
 						count[i] = 1;
-						temp.add(String.valueOf(items[i].getPrice()));
 						tp.addData(temp);
 					}
 					tp.update();

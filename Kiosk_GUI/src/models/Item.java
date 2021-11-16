@@ -16,6 +16,7 @@ public class Item {
 	private int orderCount;
 	private String filename;
 	private ImageIcon image;
+	
 
 	public Item(int num, int x, int y, int w, int h, int remain) {
 		this.num = num;
