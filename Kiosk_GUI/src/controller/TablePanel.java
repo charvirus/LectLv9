@@ -12,7 +12,7 @@ public class TablePanel extends Panel {
 
 	private TablePanel() {
 		setLayout(null);
-		setBounds(KioskFrame.WIDTH / 2 - WH / 2, tBtn_H * 4 + WH, WH, 200);
+		setBounds(KioskFrame.WIDTH / 2 - WH / 2, tBtn_H * 3 + WH, WH, 200);
 		setTable();
 	}
 
@@ -24,7 +24,7 @@ public class TablePanel extends Panel {
 
 	Vector<Vector<String>> data = new Vector<>();
 	Vector<String> colName = new Vector<>();
-
+	KioskFrame kf = KioskFrame.getInstance();
 	JTable table = null;
 	private int WH = 500;
 	private int tBtn_H = 30;
@@ -43,14 +43,14 @@ public class TablePanel extends Panel {
 
 	public void addData(Vector<String> data) {
 		this.data.add(data);
+	}
+	public void update() {
+		kf.updateBottomLabels();
 		table.revalidate();
 		repaint();
 	}
 
-	public void update() {
-		table.revalidate();
-		repaint();
-	}
+	
 
 	public Vector<Vector<String>> getData() {
 		return data;

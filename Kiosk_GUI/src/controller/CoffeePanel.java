@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.util.Vector;
 
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -24,6 +25,7 @@ public class CoffeePanel extends JPanel implements ActionListener {
 	private int btn16_WH = 100;
 	private int btn16Start_X = 35;
 	private int tBtn_H = 30;
+	private int count[] = new int[16];
 
 	public CoffeePanel() {
 		setLayout(null);
@@ -91,35 +93,49 @@ public class CoffeePanel extends JPanel implements ActionListener {
 		return items;
 	}
 
+	public int[] getCount() {
+		return count;
+	}
+
+	public void setCount(int[] count) {
+		this.count = count;
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		JButton target = (JButton) e.getSource();
 		Vector<Vector<String>> tempData = tableData.getData();
 		boolean check = false;
 		int idx = -1;
+		TablePanel tp = TablePanel.getInstance();
 		for (int i = 0; i < items.length; i++) {
 			if (target == btn16s[i]) {
-
-				for (int j = 0; j < tempData.size(); j++) {
-					if (items[i].getName().equals(tempData.get(j).get(0))) {
-						check = true;
-						idx = j;
+				if (count[i] < items[i].getRemain()) {
+					for (int j = 0; j < tempData.size(); j++) {
+						if (items[i].getName().equals(tempData.get(j).get(0))) {
+							check = true;
+							idx = j;
+						}
 					}
-				}
-				
-				if (check) {
-					int count = Integer.parseInt(tempData.get(idx).get(1));
-					count++;
-					tempData.get(idx).set(1,String.valueOf(count));
-					TablePanel tp = TablePanel.getInstance();
+					if (check) {
+						int curCount = Integer.parseInt(tempData.get(idx).get(1));
+						curCount++;
+						count[i]++;
+						int curPrice = Integer.parseInt(tempData.get(idx).get(2));
+						curPrice += items[i].getPrice();
+						tempData.get(idx).set(1, String.valueOf(curCount));
+						tempData.get(idx).set(2, String.valueOf(curPrice));
+					} else {
+						Vector<String> temp = new Vector<>();
+						temp.add(items[i].getName());
+						temp.add("1");
+						count[i] = 1;
+						temp.add(String.valueOf(items[i].getPrice()));
+						tp.addData(temp);
+					}
 					tp.update();
 				} else {
-					Vector<String> temp = new Vector<>();
-					temp.add(items[i].getName());
-					temp.add("1");
-					temp.add(String.valueOf(items[i].getPrice()));
-					TablePanel tp = TablePanel.getInstance();
-					tp.addData(temp);
+					JOptionPane.showMessageDialog(null, "재고가 부족합니다");
 				}
 			}
 		}

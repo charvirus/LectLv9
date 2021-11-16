@@ -2,12 +2,15 @@ package models;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 import controller.CoffeePanel;
 import controller.TablePanel;
@@ -31,6 +34,18 @@ public class KioskFrame extends JFrame implements ActionListener {
 	private JButton purchase_Btn = new JButton("결제");
 	private int tBtn_W = 85;
 	private int tBtn_H = 30;
+	private JLabel totalCountText = new JLabel("주문 수량");
+	private JLabel totalPriceText = new JLabel("총 가격");
+	private JLabel totalCount = new JLabel("0");
+	private JLabel totalPrice = new JLabel("0");
+	private int bottomLabel_CntX = 200;
+	private int bottomLabel_CntY = 800;
+
+	private static KioskFrame instance = new KioskFrame();
+
+	public static KioskFrame getInstance() {
+		return instance;
+	}
 
 	public KioskFrame() {
 		super("Kiosk");
@@ -40,6 +55,7 @@ public class KioskFrame extends JFrame implements ActionListener {
 		// setContentPane(); Frame 자체를 바꾸는데 효율적
 		setTopButton();
 		setPurchaseButton();
+		setBottomLabel();
 		add(coffeePanel);
 		add(tablePanel);
 		setVisible(true);
@@ -56,9 +72,39 @@ public class KioskFrame extends JFrame implements ActionListener {
 	}
 
 	private void setPurchaseButton() {
-		purchase_Btn.setBounds(KioskFrame.WIDTH / 2 - tBtn_W / 2, 850, tBtn_W, tBtn_H);
+		purchase_Btn.setBounds(KioskFrame.WIDTH / 2 - tBtn_W / 2, 910, tBtn_W, tBtn_H);
 		purchase_Btn.addActionListener(this);
-		add(purchase_Btn,0);
+		add(purchase_Btn, 0);
+	}
+
+	private void setBottomLabel() {
+		totalCountText.setBounds(KioskFrame.WIDTH / 2 - bottomLabel_CntX, bottomLabel_CntY, 150, 40);
+		totalCountText.setFont(new Font("", Font.BOLD, 20));
+		add(totalCountText, 0);
+		totalCount.setBounds(KioskFrame.WIDTH / 2 - 75, bottomLabel_CntY, 150, 40);
+		totalCount.setFont(new Font("", Font.BOLD, 20));
+		add(totalCount, 0);
+
+		totalPriceText.setBounds(KioskFrame.WIDTH / 2, bottomLabel_CntY, 150, 40);
+		totalPriceText.setFont(new Font("", Font.BOLD, 20));
+		add(totalPriceText, 0);
+		totalPrice.setBounds(KioskFrame.WIDTH / 2 + 175, bottomLabel_CntY, 150, 40);
+		totalPrice.setFont(new Font("", Font.BOLD, 20));
+		add(totalPrice, 0);
+	}
+
+	public void updateBottomLabels() {
+		TablePanel tp = TablePanel.getInstance();
+		Vector<Vector<String>> data = tp.getData();
+		System.out.println(data.size());
+		int totalPrice = 0;
+		int totalCount = 0;
+		totalCount = data.size();
+		for(int i = 0;i<data.size();i++) {
+			totalPrice += Integer.parseInt(data.get(i).get(2));
+		}
+		totalCountText.setText(String.valueOf(totalCount));
+		totalPriceText.setText(String.valueOf(totalPrice));
 	}
 
 	@Override
@@ -73,6 +119,8 @@ public class KioskFrame extends JFrame implements ActionListener {
 			add(teaPanel);
 			revalidate();
 			repaint();
+		} else if (e.getSource() == purchase_Btn) {
+
 		}
 	}
 
