@@ -65,7 +65,7 @@ public class KioskFrame extends JFrame implements ActionListener {
 	}
 
 	private void setPurchaseButton() {
-		purchase_Btn.setBounds(KioskFrame.WIDTH / 2 - tBtn_W / 2, 910, tBtn_W, tBtn_H);
+		purchase_Btn.setBounds(KioskFrame.WIDTH / 2 - tBtn_W / 2, 880, tBtn_W, tBtn_H);
 		purchase_Btn.addActionListener(this);
 		add(purchase_Btn, 0);
 	}

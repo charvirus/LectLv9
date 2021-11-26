@@ -1,6 +1,5 @@
 package controller;
 
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.Panel;
 import java.util.Vector;
@@ -28,7 +27,6 @@ public class TablePanel extends Panel {
 
 	Vector<Vector<String>> data = new Vector<>();
 	Vector<String> colName = new Vector<>();
-	KioskFrame kf = null;
 	JTable table = null;
 	private int WH = 500;
 	private int tBtn_H = 30;
@@ -78,22 +76,24 @@ public class TablePanel extends Panel {
 	private void updateBottomLabels() {
 		TablePanel tp = TablePanel.getInstance();
 		Vector<Vector<String>> data = tp.getData();
-
+		int totalPrice_ii = 0; 
 		totalcount_i = data.size();
 		for (int i = 0; i < data.size(); i++) {
-			totalPrice_i += Integer.parseInt(data.get(i).get(2));
+			totalPrice_ii += Integer.parseInt(data.get(i).get(2));
 		}
 
 		this.totalCount.setText(totalcount_i + "");
 		this.totalCount.revalidate();
 		this.totalCount.repaint();
 
-		this.totalPrice.setText(totalPrice_i + "");
+		this.totalPrice.setText(totalPrice_ii + "");
 		this.totalPrice.revalidate();
 		this.totalPrice.repaint();
 
 		this.revalidate();
 		this.repaint();
+		
+		totalPrice_i = totalPrice_ii;
 	}
 
 	public void update() {
@@ -104,6 +104,8 @@ public class TablePanel extends Panel {
 
 	public void resetTable() {
 		data.clear();
+		this.totalCount.setText(0 + "");
+		this.totalPrice.setText(0 + "");
 	}
 
 	public void addData(Vector<String> data) {
