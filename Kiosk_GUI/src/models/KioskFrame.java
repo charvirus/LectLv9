@@ -35,7 +35,7 @@ public class KioskFrame extends JFrame implements ActionListener {
 	private JButton purchase_Btn = new JButton("∞·¡¶");
 	private int tBtn_W = 85;
 	private int tBtn_H = 30;
-	private static KioskFrame instance = new KioskFrame();
+	private static KioskFrame instance = new KioskFrame(); // ???????????????????????????????
 
 	public static KioskFrame getInstance() {
 		return instance;
