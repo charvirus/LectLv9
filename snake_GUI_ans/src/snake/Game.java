@@ -227,7 +227,7 @@ class Game extends MyUtil {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-
+		boolean dirPressed = true;
 		if (e.getKeyCode() == 37) {
 			this.dir = 1;
 		} else if (e.getKeyCode() == 39) {
@@ -236,8 +236,10 @@ class Game extends MyUtil {
 			this.dir = 3;
 		} else if (e.getKeyCode() == 40) {
 			this.dir = 4;
+		} else {
+			dirPressed = false;
 		}
-		if (canMove) {
+		if (dirPressed && canMove) {
 			move();
 		}
 	}
