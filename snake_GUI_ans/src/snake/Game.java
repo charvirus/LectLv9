@@ -22,7 +22,7 @@ class Game extends MyUtil {
 	private int length;
 	private int dir = 0;
 	private boolean growTail;
-	
+	private boolean canMove = true;
 	private Color head = Color.red;
 	private Color body = Color.green;
 
@@ -123,7 +123,7 @@ class Game extends MyUtil {
 
 		for (int i = 0; i < map.length; i++) {
 			for (int j = 0; j < map[i].length; j++) {
-				this.map[i][j] = new Rect(x, y, BUTTON, BUTTON,Color.black);
+				this.map[i][j] = new Rect(x, y, BUTTON, BUTTON, Color.black);
 				this.map[i][j].setC(Color.black);
 				x += BUTTON;
 			}
@@ -143,7 +143,7 @@ class Game extends MyUtil {
 			g.fillRect(nemo.getX(), nemo.getY(), nemo.getWidth(), nemo.getHeight());
 
 		}
-		
+
 		// map line
 		for (int i = 0; i < map.length; i++) {
 			for (int j = 0; j < map[i].length; j++) {
@@ -192,7 +192,7 @@ class Game extends MyUtil {
 				check = true;
 			}
 		}
-		if (!check) {
+		if (!check || growTail) {
 
 			// snake
 			// body
@@ -207,7 +207,7 @@ class Game extends MyUtil {
 				this.yx.set(i, this.yx.get(i - 1));
 			}
 			Rect temp = this.map[yy][xx];
-			Rect newHead = new Rect(temp.getX(), temp.getY(), temp.getWidth(), temp.getHeight(),head);
+			Rect newHead = new Rect(temp.getX(), temp.getY(), temp.getWidth(), temp.getHeight(), head);
 			this.snake.set(0, newHead);
 			ArrayList<Integer> pair = new ArrayList<Integer>();
 			pair.add(yy);
@@ -220,8 +220,8 @@ class Game extends MyUtil {
 				growTail = false;
 			}
 		} else {
-			System.out.println("»ç¸Á");
-			// new Alert();
+			canMove = false;
+			JOptionPane.showMessageDialog(null, "»ç¸Á");
 		}
 	}
 
@@ -237,9 +237,9 @@ class Game extends MyUtil {
 		} else if (e.getKeyCode() == 40) {
 			this.dir = 4;
 		}
-
-		move();
-
+		if (canMove) {
+			move();
+		}
 	}
 
 	@Override
